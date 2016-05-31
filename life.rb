@@ -75,7 +75,7 @@ class Game
       else
         i += 1
       end
-        counter += 1
+      counter += 1
     end
     neighbors.delete_if{ |cell| cell == self.board[x][y]}
     neighbors

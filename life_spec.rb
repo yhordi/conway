@@ -19,6 +19,9 @@ describe Game do
     it 'returns an array of 8 neighboring cells' do
       expect(game.neighbors_of(4, 5).length).to eq(8)
     end
+    it 'does not include the original cell' do
+      expect(game.neighbors_of(4, 5)).to_not include(game.board[4][5])
+    end
   end
 end
 

@@ -1,8 +1,4 @@
 require_relative('life')
-# Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-# Any live cell with two or three live neighbours lives on to the next generation.
-# Any live cell with more than three live neighbours dies, as if by over-population.
-# Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
 describe Game do
   let(:game) { game = Game.new({size: 9}) }
@@ -49,6 +45,14 @@ describe Game do
       game.make_life
       game.next_generation
       expect{game.print_board}.to output{"...o.o..."}.to_stdout
+    end
+  end
+  describe '#build' do
+    it 'assembles a board for the new generation' do
+      game.make_life
+      cell = game.board[4][4]
+      game.next_generation
+      expect(game.board[4][4]).to_not be_alive
     end
   end
 end

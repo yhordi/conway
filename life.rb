@@ -1,10 +1,3 @@
-# Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-# Any live cell with two or three live neighbours lives on to the next generation.
-# Any live cell with more than three live neighbours dies, as if by over-population.
-# Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-
-print "\e[H\e[2J"
-
 class Cell
   attr_reader :death, :birth
   def initialize(alive)
@@ -77,38 +70,19 @@ class Game
   end
 
   def build
-    new_board = []
     @board.map do |array|
-      column = []
       array.map do |cell|
-        if cell.death
-          cell.die!
-        elsif cell.birth
-          cell.live!
-        end
-        cell.reset
-        column << cell
+        cycle(cell)
       end
-      new_board << column
     end
-    @board = new_board
+    @board
   end
 
   def neighbors_of(x, y)
     neighbors = []
     i = x - 1
     j = y + 1
-    counter = 1
-    9.times do |cell|
-      edge_check(i, j, neighbors)
-      if counter % 3 == 0
-        j -= 1
-        i = x - 1
-      else
-        i += 1
-      end
-      counter += 1
-    end
+    decrement_y_axis(i, j, x, neighbors)
     neighbors.delete_if{ |cell| cell == self.board[x][y]}
   end
 
@@ -129,6 +103,29 @@ class Game
 
 
   private
+
+  def cycle(cell)
+    if cell.death
+      cell.die!
+    elsif cell.birth
+      cell.live!
+    end
+    cell.reset
+  end
+
+  def decrement_y_axis(i, j, x, neighbors)
+    counter = 1
+    9.times do |cell|
+      edge_check(i, j, neighbors)
+      if counter % 3 == 0
+        j -= 1
+        i = x - 1
+      else
+        i += 1
+      end
+      counter += 1
+    end
+  end
 
   def living_neighbors(neighbors)
     neighbors.delete_if { |cell| !cell.alive? }

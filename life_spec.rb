@@ -22,8 +22,18 @@ describe Game do
     it 'does not include the original cell' do
       expect(game.neighbors_of(4, 5)).to_not include(game.board[4][5])
     end
-    it 'checks edges on the opposite side of the board if the current cell is on the edge of the board' do
+    it 'checks edges on the opposite side of the board if the current cell is on the top right of the board' do
       expect(game.neighbors_of(8, 8)).to include(game.board[0][0])
+    end
+     it 'checks edges on the opposite side of the board if the current cell is on the top left of the board' do
+      expect(game.neighbors_of(0, 0)).to include(game.board[8][8])
+    end
+  end
+  describe '#next_generation' do
+    it 'evolves the board throughout one tick per cell' do
+      game.make_life
+      game.next_generation
+      expect(game.board[4][3].alive?).to be(true)
     end
   end
 end

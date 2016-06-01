@@ -41,13 +41,6 @@ class Game
     build_board
   end
 
-  def find_map_edges
-    # @board.each do |cell|
-    #   if cell % 9 == 0
-    #   end
-    # end
-  end
-
   def make_life
     @board[3][4].live!
     @board[4][4].live!
@@ -57,8 +50,12 @@ class Game
   end
 
   def next_generation
-    @board.map do |cell|
-      neighbors_of(cell)
+    @board.map do |array|
+      x = @board.index(array)
+      array.map do |cell|
+        y = array.index(cell)
+        cell.tick(neighbors_of(x, y))
+      end
     end
   end
 
@@ -69,7 +66,6 @@ class Game
     counter = 1
     9.times do |cell|
       edge_check(i, j, neighbors)
-
       if counter % 3 == 0
         j -= 1
         i = x - 1
@@ -79,9 +75,15 @@ class Game
       counter += 1
     end
     neighbors.delete_if{ |cell| cell == self.board[x][y]}
-    neighbors
+    living_neighbors(neighbors)
   end
 
+  private
+
+  def living_neighbors(neighbors)
+    neighbors.delete_if { |cell| !cell.alive? }
+    neighbors.length
+  end
 
   def edge_check(x, y, neighbors)
     if edge?(x)
@@ -92,9 +94,6 @@ class Game
     end
     neighbors << self.board[x][y]
   end
-
-
-  private
 
   def wrap!(coordinate)
     return 0 if coordinate > 8

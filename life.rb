@@ -162,8 +162,5 @@ class Game
     @board
   end
 
-  def neighbors_loop(x, y, neighbors)
-
-  end
 end
 

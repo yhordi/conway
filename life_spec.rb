@@ -30,10 +30,25 @@ describe Game do
     end
   end
   describe '#next_generation' do
-    it 'evolves the board throughout one tick per cell' do
+    before(:each) do
       game.make_life
       game.next_generation
-      expect(game.board[4][3].alive?).to be(true)
+    end
+    it 'evolves the board throughout one tick per cell' do
+      expect(game.board[4][3]).to be_alive
+    end
+    it 'kills cells with too many neighbors' do
+      expect(game.board[4][5].alive?).to be(false)
+    end
+    it 'brings dead cells to life with 3 live neighbors' do
+      expect(game.board[3][6]).to be_alive
+    end
+  end
+  describe '#print_board' do
+    it 'displays the board visually' do
+      game.make_life
+      game.next_generation
+      game.print_board
     end
   end
 end

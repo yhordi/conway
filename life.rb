@@ -77,6 +77,22 @@ class Game
     neighbors.delete_if{ |cell| cell == self.board[x][y]}
   end
 
+
+  def print_board
+    print "\e[H\e[2J"
+    @board.each do |array|
+      puts
+      array.each do |cell|
+        if cell.alive?
+          print "o"
+        else
+          print "."
+        end
+      end
+    end
+  end
+
+
   private
 
   def living_neighbors(neighbors)

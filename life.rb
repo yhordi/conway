@@ -54,7 +54,7 @@ class Game
       x = @board.index(array)
       array.map do |cell|
         y = array.index(cell)
-        cell.tick(neighbors_of(x, y))
+        cell.tick(living_neighbors(neighbors_of(x, y)))
       end
     end
   end
@@ -75,7 +75,6 @@ class Game
       counter += 1
     end
     neighbors.delete_if{ |cell| cell == self.board[x][y]}
-    living_neighbors(neighbors)
   end
 
   private

@@ -22,6 +22,9 @@ describe Game do
     it 'does not include the original cell' do
       expect(game.neighbors_of(4, 5)).to_not include(game.board[4][5])
     end
+    it 'checks edges on the opposite side of the board if the current cell is on the edge of the board' do
+      expect(game.neighbors_of(8, 8)).to include(game.board[0][0])
+    end
   end
 end
 

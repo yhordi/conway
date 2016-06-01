@@ -68,7 +68,8 @@ class Game
     j = y + 1
     counter = 1
     9.times do |cell|
-      neighbors << self.board[i][j]
+      edge_check(i, j, neighbors)
+
       if counter % 3 == 0
         j -= 1
         i = x - 1
@@ -81,7 +82,29 @@ class Game
     neighbors
   end
 
+
+  def edge_check(x, y, neighbors)
+    if edge?(x)
+      x = wrap!(x)
+    end
+    if edge?(y)
+      y = wrap!(y)
+    end
+    neighbors << self.board[x][y]
+  end
+
+
   private
+
+  def wrap!(coordinate)
+    return 0 if coordinate > 8
+    return 8 if coordinate < 0
+  end
+
+  def edge?(coordinate)
+    return true if coordinate > 8
+    return true if coordinate < 0
+  end
 
   def build_board
     @size.times do

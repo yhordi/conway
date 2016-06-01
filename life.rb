@@ -6,8 +6,24 @@
 print "\e[H\e[2J"
 
 class Cell
+  attr_reader :death, :birth
   def initialize(alive)
     @alive = alive
+    @death = false
+    @birth = false
+  end
+
+  def death!
+    @death = true
+  end
+
+  def birth!
+    @birth = true
+  end
+
+  def reset
+    @birth = false
+    @death = false
   end
 
   def alive?
@@ -15,12 +31,12 @@ class Cell
   end
 
   def tick(neighbors)
-    if neighbors < 2
-      self.die!
+    if neighbors < 2 && self.alive?
+      self.death!
     elsif neighbors > 3
-      self.die!
+      self.death!
     elsif !self.alive? && neighbors == 3
-      self.live!
+      self.birth!
     end
   end
 
@@ -57,6 +73,25 @@ class Game
         cell.tick(living_neighbors(neighbors_of(x, y)))
       end
     end
+    build
+  end
+
+  def build
+    new_board = []
+    @board.map do |array|
+      column = []
+      array.map do |cell|
+        if cell.death
+          cell.die!
+        elsif cell.birth
+          cell.live!
+        end
+        cell.reset
+        column << cell
+      end
+      new_board << column
+    end
+    @board = new_board
   end
 
   def neighbors_of(x, y)

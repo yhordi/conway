@@ -37,18 +37,18 @@ describe Game do
     it 'evolves the board throughout one tick per cell' do
       expect(game.board[4][3]).to be_alive
     end
-    it 'kills cells with too many neighbors' do
-      expect(game.board[4][5].alive?).to be(false)
+    it 'will kill cells with too many neighbors' do
+      expect(game.board[4][4].alive?).to be(false)
     end
     it 'brings dead cells to life with 3 live neighbors' do
-      expect(game.board[3][6]).to be_alive
+      expect(game.board[3][5]).to be_alive
     end
   end
   describe '#print_board' do
     it 'displays the board visually' do
       game.make_life
       game.next_generation
-      game.print_board
+      expect{game.print_board}.to output{"...o.o..."}.to_stdout
     end
   end
 end
@@ -57,21 +57,21 @@ describe Cell do
   describe '#tick' do
     let(:living_cell) { Cell.new(true) }
     let(:dead_cell) { Cell.new(false) }
-    it 'kills cell if neighbors are fewer than 2' do
+    it 'sets cell death to true if cell neighbors are fewer than 2' do
       living_cell.tick(1)
-      expect(living_cell.alive?).to eq(false)
+      expect(living_cell.death).to eq(true)
     end
-    it 'kills cell if neighbors are greater than 3' do
+    it 'sets cell death to true if cell neighbors are greater than 3' do
       living_cell.tick(4)
-      expect(living_cell.alive?).to eq(false)
+      expect(living_cell.death).to eq(true)
     end
     it 'will continue to live if with two or three neighbors' do
       living_cell.tick(2)
       expect(living_cell.alive?).to eq(true)
     end
-    it 'will bring a dead cell to life with exactly three neighbors' do
+    it 'sets cell birth to true if cell has exactly 3 neighbors' do
       dead_cell.tick(3)
-      expect(dead_cell.alive?).to eq(true)
+      expect(dead_cell.birth).to eq(true)
     end
   end
 end
